@@ -1,4 +1,5 @@
 # SpringBoot
+<<<<<<< HEAD
 ## DB UML
 ![DB UML](https://github.com/Erartria/SpringBoot/blob/master/UML/DB%20architecture.PNG)
 ## MVC class UML
