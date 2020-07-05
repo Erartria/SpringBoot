@@ -1,9 +1,11 @@
 package com.leonid.springboot.repositories;
 
-import com.leonid.springboot.entities.Log;
+import com.leonid.springboot.models.Gender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface LogRepository extends JpaRepository<Log, Integer> {
+public interface GenderRepository extends JpaRepository<Gender,Integer> {
 }

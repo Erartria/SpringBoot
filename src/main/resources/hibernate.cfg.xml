@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- database connection properties -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">`1qsc</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
+
+        <!-- show mysql queries output in console -->
+        <property name="hibernate.show_sql">true</property>
+
+        <!-- manage automatic database creation -->
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
+
+        <!-- add annotated resources here-->
+        <mapping class="com.leonid.springboot.models.Gender"/>
+        <mapping class="com.leonid.springboot.entities.Profile"/>
+        <mapping class="com.leonid.springboot.models.Status"/>
+
+
+    </session-factory>
+</hibernate-configuration>

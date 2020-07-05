@@ -1,66 +1,98 @@
 package com.leonid.springboot.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.leonid.springboot.models.Gender;
+import com.leonid.springboot.models.Status;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "profiles",schema = "project")
-public class Profile {
+@NoArgsConstructor
+@Data public class Profile {
     @Id
-    @SequenceGenerator(name = "profileIdSeq",sequenceName = "project.profiles_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profileIdSeq")
-    @Column(name = "id")
-    private int id;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id){
-        this.id = id;
-    }
-
-    @Getter
-    @Setter
-    @Column(name = "name")
-    private String name;
-    @Getter
-    @Setter
-    @Column(name = "surname")
-    private String surName;
-    @Getter
-    @Setter
-    @Column(name = "age")
-    private int age;
-    @Getter
-    @Setter
-    @Column(name = "email")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_seq")
+    @SequenceGenerator(name = "profile_seq", schema = "project", sequenceName = "profile_id_sequence",allocationSize = 1)
+    @Column(name = "profile_id",updatable = false, nullable = false)
+    private int profileId;
+    private String username;
     private String email;
-    @Getter
-    @Setter
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "statusid")
-    private Status statusId;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinColumn(name = "genderid")
-    private Gender genderId;
+    /*@Embedded
+    @AttributeOverrides(value = {
+            @AttributeOverride(name = "statusValue", column = @Column(name = "status_value"))
+    })*/
+    /*@ManyToOne
+    @JoinColumn(name ="status",insertable = false, updatable = false, referencedColumnName = "status_id")
+    private Status status;
+*/
+   /* @ManyToOne
+    @JoinColumn(name ="gender_id_fk",insertable = false, updatable = false, referencedColumnName = "gender_id")
+    private Gender gender;*/
 
-    public Gender getGenderId() {
-        return genderId;
+    public int getProfileId() {
+        return profileId;
     }
 
-    public Profile() {
+    public void setProfileId(int profileId) {
+        this.profileId = profileId;
     }
 
-    public Profile(String name, String surname, int age, String email, Status statusId, Gender genderId) {
-        this.name = name;
-        this.surName = surname;
-        this.age = age;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
-        this.statusId = statusId;
-        this.genderId = genderId;
+    }
+
+    /*public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }*/
+
+    /*public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void setGenderID(int id) {
+        this.gender.setGenderId(id);
+    }
+
+    public int getGenderID(int id) {
+        return this.gender.getGenderId();
+    }
+*/
+
+
+
+    public Profile(Status status, String username, String email, Gender gender) {
+        super();
+        //this.status = status;
+        this.username = username;
+        this.email = email;
+        //this.gender = gender;
+    }
+
+    public Profile(String username, String email) {
+        super();
+        this.username = username;
+        this.email = email;
     }
 }
