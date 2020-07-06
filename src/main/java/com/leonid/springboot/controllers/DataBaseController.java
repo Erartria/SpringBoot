@@ -71,11 +71,12 @@ public class DataBaseController {
     public List<LogDTO> getLogsByTimestampAndStatus(
             @PathVariable(value = "status") String status,
             @RequestParam(value = "timestamp", required = false, defaultValue = "0") long time) {
+        List<LogModel> logModelList = logService.getAllByStatusAndTimestamp(time,status);
         List<LogDTO> logDTOList = new ArrayList<>();
-        List<LogModel> logModelList = logService.getAllByStatusAndTimestamp(time, status);
-        for (LogModel lm :
+        for (LogModel log :
                 logModelList) {
-            logDTOList.add(new LogDTO(lm.getId(), lm.getProfileId(), lm.getChangedTime(), lm.getNewStatus()));
+            LogDTO logdto = new LogDTO(log.getId(), log.getProfileId(), log.getChangedTime(), log.getNewStatus());
+            logDTOList.add(logdto);
         }
         return logDTOList;
     }

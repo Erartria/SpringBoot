@@ -13,6 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface LogRepository extends JpaRepository<Log, Integer> {
-    @Query("select l from Log l where l.changedTime<=:time and l.status.statusValue=:status")
-    List<Log> findAllByChangedTimeBeforeAndStatus(@Param("time") long time, @Param("status") String statusValue);
+    @Query("select l from Log l where l.changedTime>=:time and l.status.statusValue=:status")
+    List<Log> findAllByChangedTimeAfterAndStatus(@Param("time") long time, @Param("status") String statusValue);
 }

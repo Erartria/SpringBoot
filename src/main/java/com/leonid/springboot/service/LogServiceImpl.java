@@ -28,13 +28,12 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
         List<LogModel> logModels = new ArrayList<>();
         for (Log log :
                 logList) {
-            LogModel logModel = new LogModel(
+            logModels.add(new LogModel(
                     log.getLogId(),
                     log.getProfile().getProfileId(),
                     log.getChangedTime(),
                     log.getStatus().getStatusValue()
-            );
-            logModels.add(logModel);
+            ));
         }
         return logModels;
     }
@@ -69,10 +68,15 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
 
     public List<LogModel> getAllByStatusAndTimestamp(long time, String statusValue) {
         List<LogModel> logModelList = new ArrayList<>();
-        List<Log> logList = logRepository.findAllByChangedTimeBeforeAndStatus(time, statusValue);
+        List<Log> logList = logRepository.findAllByChangedTimeAfterAndStatus(time, statusValue);
         for (Log log :
                 logList) {
-            logModelList.add(new LogModel(log.getLogId(),log.getChangedTime(),log.getStatus().getStatusValue()));
+            logModelList.add(new LogModel(
+                    log.getLogId(),
+                    log.getProfile().getProfileId(),
+                    log.getChangedTime(),
+                    log.getStatus().getStatusValue()
+            ));
         }
         return  logModelList;
     }
