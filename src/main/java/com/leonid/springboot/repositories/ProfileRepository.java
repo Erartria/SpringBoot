@@ -1,19 +1,19 @@
 package com.leonid.springboot.repositories;
 
+import com.leonid.springboot.entities.Gender;
 import com.leonid.springboot.entities.Profile;
-import com.leonid.springboot.models.Gender;
+import com.leonid.springboot.entities.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Integer> {
-    @Query("select p From Profile p join fetch p.gender g where g.genderValue = ?1")
-    List<Profile> getProfileByGender_GenderValue(String genderValue);
+    @Query("select g From Gender g where g.genderValue = ?1")
+    List<Gender> getGenderByGender_GenderValue(String genderValue);
 
-    Optional<Profile> getFirstByGender_GenderValue(String genderValue);
+    @Query("select s From Status s where s.statusValue = ?1")
+    List<Status> getStatusByStatus_StatusValue(String statusValue);
 }

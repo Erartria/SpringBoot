@@ -2,11 +2,8 @@ package com.leonid.springboot.controllers;
 
 
 import com.leonid.springboot.entities.Profile;
-import com.leonid.springboot.models.Gender;
-import com.leonid.springboot.repositories.GenderRepository;
-import com.leonid.springboot.repositories.ProfileRepository;
-import com.leonid.springboot.service.ProfileServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.leonid.springboot.models.ProfileModel;
+import com.leonid.springboot.service.MyServiceInterface;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,16 +15,20 @@ import java.util.List;
 
 @RestController
 public class MainController {
-    @Autowired
-    ProfileServiceInterface profileServiceInterface;
+    final
+    MyServiceInterface myServiceInterface;
+
+    public MainController(MyServiceInterface myServiceInterface) {
+        this.myServiceInterface = myServiceInterface;
+    }
 
     @GetMapping("/profiles")
     public List<Profile> getProfiles() {
-        return profileServiceInterface.getAll();
+        return myServiceInterface.getAll();
     }
 
     @PostMapping("/create")
-    public String createProfile(@RequestBody Profile profile) {
-        return String.format("ID пользователя: %d",profileServiceInterface.create(profile));
+    public String createProfile(@RequestBody ProfileModel profile) {
+        return String.format("ID пользователя: %d", myServiceInterface.create(profile));
     }
 }
