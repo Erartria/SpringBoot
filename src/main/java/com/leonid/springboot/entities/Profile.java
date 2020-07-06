@@ -34,5 +34,5 @@ public class Profile {
         this.status = status;
         this.gender = gender;
 
-    }
+}
 }

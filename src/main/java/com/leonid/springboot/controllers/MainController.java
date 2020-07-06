@@ -38,10 +38,17 @@ public class MainController {
         return String.format("ID пользователя: %d", myServiceInterface.create(pm));
     }
 
-    @GetMapping("/profiles/{id}")
+    @GetMapping("/profile/{id}")
     public ProfileDTO getProfileById(@PathVariable(value = "id") Integer profileId) {
         ProfileModel pm = myServiceInterface.findById(profileId);
         return new ProfileDTO(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
+    }
+
+    @PostMapping("/profile/{id}/{status}")
+    public boolean changeStatus(
+            @PathVariable(value = "id") Integer profileId,
+            @PathVariable(value = "status") String status) {
+        return myServiceInterface.changedStatus(profileId,status);
     }
 
 }
