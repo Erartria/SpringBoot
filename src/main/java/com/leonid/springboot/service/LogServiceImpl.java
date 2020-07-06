@@ -40,13 +40,12 @@ public class LogServiceImpl implements MyServiceInterface<LogModel, Integer> {
 
     @Override
     public Integer create(LogModel logModel) {
-        ProfileModel pm = profileService.findById(logModel.getProfile_id());
-        this.logRepository.save(
-                profileService.convertFromModelToEntity(pm),
-                pm.getStatus(),
-                ),
-                logModel.
-        ))
+        Profile profile = profileService.convertFromModelToEntity(profileService.findById(logModel.getProfile_id()));
+        this.logRepository.save(new Log(
+                profile,
+                profile.getStatus(),
+                System.currentTimeMillis()
+        ));
         return null;
     }
 }
