@@ -80,19 +80,19 @@ public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Inte
         );
     }
 
-    public Status changedStatus(int profileId, String statusValue) {
+    public boolean changedStatus(int profileId, String statusValue) {
         Profile profile = this.profileRepository.findById(profileId)
                 .orElseThrow(() ->
                         new EntityException("Profile " + profileId + " is not exists")
                 );
         if(profile.getStatus().getStatusValue().equals(statusValue)){
-            return profile.getStatus();
+            return true;
         }
         this.profileRepository.setStatusById(statusRepository.findFirstByStatusValue(statusValue)
                 .orElseGet(()-> {
                     return statusRepository.save(new Status(statusValue.toLowerCase()));
                 })
                 ,profileId);
-        return true;
+        return false;
     }
 }

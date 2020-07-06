@@ -5,35 +5,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class LogModel {
-    private int profile_id;
-    private String userName;
+    private int profileId;
     private long changedTime;
     private String newStatus;
 
-    public LogModel(int profile_id, String userName, long changedTime, String newStatus) {
-        this.profile_id = profile_id;
-        this.userName = userName;
-        this.changedTime = changedTime;
+    public LogModel(int profileId, String newStatus) {
+        this.profileId = profileId;
         this.newStatus = newStatus;
     }
 
-    public int getProfile_id() {
-        return profile_id;
-    }
-
-    public void setProfile_id(int profile_id) {
-        this.profile_id = profile_id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public LogModel(int profileId, String newStatus, long changedTime) {
+        this.profileId = profileId;
+        this.newStatus = newStatus;
+        this.changedTime = changedTime;
     }
 
     public long getChangedTime() {
@@ -48,13 +34,15 @@ public class LogModel {
         return newStatus;
     }
 
-    public void setNewStatus(String newStatus) {
-        this.newStatus = newStatus;
+    public int getProfileId() {
+        return profileId;
     }
 
-    public LogModel(String userName, long changedTime, String newStatus) {
-        this.userName = userName;
-        this.changedTime = changedTime;
+    public void setProfileId(int profileId) {
+        this.profileId = profileId;
+    }
+
+    public void setNewStatus(String newStatus) {
         this.newStatus = newStatus;
     }
 }

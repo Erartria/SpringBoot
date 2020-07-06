@@ -13,7 +13,7 @@ public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "log_seq")
     @SequenceGenerator(name = "log_seq", schema = "project", sequenceName = "logs_id_sequence", allocationSize = 1)
-    @Column(name = "log_id", , updatable = false, nullable = false)
+    @Column(name = "log_id", updatable = false, nullable = false)
     private int logId;
     @ManyToOne
     @JoinColumn(name = "profile_id_fk", referencedColumnName = "profile_id")

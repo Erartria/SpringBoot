@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileDTO {
-    private String userName;
-    private String email;
-    private String gender;
-    private String status;
+public class LogDTO {
+    private int profileID;
+    private long changedTime;
+    private String newStatus;
 }
