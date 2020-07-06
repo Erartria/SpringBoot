@@ -22,27 +22,4 @@ public class LogModel {
         this.changedTime = changedTime;
     }
 
-    public long getChangedTime() {
-        return changedTime;
-    }
-
-    public void setChangedTime(long changedTime) {
-        this.changedTime = changedTime;
-    }
-
-    public String getNewStatus() {
-        return newStatus;
-    }
-
-    public int getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(int profileId) {
-        this.profileId = profileId;
-    }
-
-    public void setNewStatus(String newStatus) {
-        this.newStatus = newStatus;
-    }
 }
