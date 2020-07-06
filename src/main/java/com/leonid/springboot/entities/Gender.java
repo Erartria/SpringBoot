@@ -1,5 +1,6 @@
 package com.leonid.springboot.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,8 +8,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "genderes", schema = "project")
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 public class Gender {
 
     @Id
@@ -20,11 +21,6 @@ public class Gender {
 
 
     public Gender(String genderValue) {
-        this.genderValue = genderValue;
-    }
-
-    public Gender(int genderId, String genderValue) {
-        this.genderId = genderId;
         this.genderValue = genderValue;
     }
 

@@ -5,7 +5,9 @@ import com.leonid.springboot.entities.Profile;
 import com.leonid.springboot.entities.Status;
 import com.leonid.springboot.exception.EntityException;
 import com.leonid.springboot.models.ProfileModel;
+import com.leonid.springboot.repositories.GenderRepository;
 import com.leonid.springboot.repositories.ProfileRepository;
+import com.leonid.springboot.repositories.StatusRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,11 +15,14 @@ import java.util.List;
 
 @Service
 public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Integer> {
-    final
-    ProfileRepository repository;
+    private final ProfileRepository repository;
+    private final GenderRepository genderRepository;
+    private final StatusRepository statusRepository;
 
-    public ProfileServiceImpl(ProfileRepository repository) {
+    public ProfileServiceImpl(ProfileRepository repository, GenderRepository genderRepository, StatusRepository statusRepository) {
         this.repository = repository;
+        this.genderRepository = genderRepository;
+        this.statusRepository = statusRepository;
     }
 
 
@@ -40,25 +45,31 @@ public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Inte
 
     @Override
     public ProfileModel findById(Integer integer) {
-        return null;
+        Profile profile = repository.findById(integer)
+                .orElseThrow(() ->
+                        new EntityException("Profile with id " + integer + " not found")
+                );
+        return new ProfileModel(
+                profile.getUsername().toLowerCase(),
+                profile.getEmail().toLowerCase(),
+                profile.getGender().getGenderValue().toLowerCase(),
+                profile.getStatus().getStatusValue().toLowerCase()
+        );
     }
 
     @Override
     public Integer create(ProfileModel profileModel) {
-        List<Status> ls = repository.getStatusByStatus_StatusValue(profileModel.getStatus());
-        List<Gender> lg = repository.getGenderByGender_GenderValue(profileModel.getGender());
-        if (ls.isEmpty() && ls == null) {
-            new EntityException("Status " + profileModel.getStatus() + "is not exists");
-        } else if (lg.isEmpty() && lg == null) {
-            new EntityException("Gender " + profileModel.getGender() + "is not exists");
-        }
-        Status s = ls.get(0);
-        Gender g = lg.get(0);
         return this.repository.save(new Profile(
-                s,
-                profileModel.getUserName(),
-                profileModel.getEmail(),
-                g
+                statusRepository.findFirstByStatusValue(profileModel.getStatus().toLowerCase())
+                        .orElseGet(() -> {
+                            return statusRepository.save(new Status(profileModel.getStatus().toLowerCase()));
+                        }),
+                profileModel.getUserName().toLowerCase(),
+                profileModel.getEmail().toLowerCase(),
+                genderRepository.findFirstByGenderValue(profileModel.getGender().toLowerCase())
+                        .orElseGet(() -> {
+                            return genderRepository.save(new Gender(profileModel.getGender().toLowerCase()));
+                        })
         ))
                 .getProfileId();
     }

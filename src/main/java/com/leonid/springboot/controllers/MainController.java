@@ -1,14 +1,12 @@
 package com.leonid.springboot.controllers;
 
 
-import com.leonid.springboot.entities.Profile;
+import com.leonid.springboot.dto.ProfileDTO;
 import com.leonid.springboot.models.ProfileModel;
-import com.leonid.springboot.service.MyServiceInterface;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.leonid.springboot.service.ProfileServiceImpl;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 ;
@@ -16,19 +14,34 @@ import java.util.List;
 @RestController
 public class MainController {
     final
-    MyServiceInterface myServiceInterface;
+    ProfileServiceImpl myServiceInterface;
 
-    public MainController(MyServiceInterface myServiceInterface) {
+    public MainController(ProfileServiceImpl myServiceInterface) {
         this.myServiceInterface = myServiceInterface;
     }
 
     @GetMapping("/profiles")
-    public List<Profile> getProfiles() {
-        return myServiceInterface.getAll();
+    public List<ProfileDTO> getProfiles() {
+        List<ProfileModel> profileModelList = myServiceInterface.getAll();
+        List<ProfileDTO> profileDTOList = new ArrayList<>();
+        for (ProfileModel pm :
+                profileModelList) {
+            ProfileDTO profileDTO = new ProfileDTO(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
+            profileDTOList.add(profileDTO);
+        }
+        return profileDTOList;
     }
 
     @PostMapping("/create")
-    public String createProfile(@RequestBody ProfileModel profile) {
-        return String.format("ID пользователя: %d", myServiceInterface.create(profile));
+    public String createProfile(@RequestBody ProfileDTO profile) {
+        ProfileModel pm = new ProfileModel(profile.getUserName(), profile.getEmail(), profile.getGender(), profile.getStatus());
+        return String.format("ID пользователя: %d", myServiceInterface.create(pm));
     }
+
+    @GetMapping("/profiles/{id}")
+    public ProfileDTO getProfileById(@PathVariable(value = "id") Integer profileId) {
+        ProfileModel pm = myServiceInterface.findById(profileId);
+        return new ProfileDTO(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
+    }
+
 }

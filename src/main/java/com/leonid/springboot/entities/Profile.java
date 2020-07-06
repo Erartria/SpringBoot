@@ -1,5 +1,7 @@
 package com.leonid.springboot.entities;
 
+import jdk.jfr.DataAmount;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,8 +9,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "profiles", schema = "project")
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_seq")
@@ -18,10 +20,6 @@ public class Profile {
     private String username;
     private String email;
 
-    /*@Embedded
-    @AttributeOverrides(value = {
-            @AttributeOverride(name = "statusValue", column = @Column(name = "status_value"))
-    })*/
     @ManyToOne
     @JoinColumn(name = "status_id_fk", referencedColumnName = "status_id")
     private Status status;
@@ -30,15 +28,11 @@ public class Profile {
     @JoinColumn(name = "gender_id_fk", referencedColumnName = "gender_id")
     private Gender gender;
 
-    public Profile(Status status, String username, String email, Gender gender) {
+    public Profile(Status status, String username, String email,  Gender gender) {
+        this.username = username;
+        this.email = email;
         this.status = status;
-        this.username = username;
-        this.email = email;
         this.gender = gender;
-    }
 
-    public Profile(String username, String email) {
-        this.username = username;
-        this.email = email;
     }
 }

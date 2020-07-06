@@ -1,13 +1,13 @@
 package com.leonid.springboot.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "statuses", schema = "project")
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Status {
 
@@ -16,15 +16,9 @@ public class Status {
     @SequenceGenerator(name = "status_seq", schema = "project", sequenceName = "status_id_sequence", allocationSize = 1)
     @Column(name = "status_id", updatable = false, nullable = false)
     private int statusId;
-
     private String statusValue;
 
     public Status(String statusValue) {
-        this.statusValue = statusValue;
-    }
-
-    public Status(int id, String statusValue) {
-        this.statusId = id;
         this.statusValue = statusValue;
     }
 
