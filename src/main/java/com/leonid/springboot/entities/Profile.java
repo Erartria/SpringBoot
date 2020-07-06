@@ -1,7 +1,5 @@
 package com.leonid.springboot.entities;
 
-import jdk.jfr.DataAmount;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +32,5 @@ public class Profile {
         this.email = email;
         this.status = status;
         this.gender = gender;
-
-}
+    }
 }

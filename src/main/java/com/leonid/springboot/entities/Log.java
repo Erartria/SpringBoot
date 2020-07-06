@@ -1,14 +1,16 @@
 package com.leonid.springboot.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "logs",schema = "project")
+@Table(name = "logs", schema = "project")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "log_seq")
@@ -27,7 +29,6 @@ public class Log {
 
 
     public Log(Profile profile, Status status, long changedTime) {
-        this.logId = logId;
         this.profile = profile;
         this.status = status;
         this.changedTime = changedTime;

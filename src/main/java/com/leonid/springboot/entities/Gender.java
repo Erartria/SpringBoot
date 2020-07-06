@@ -1,6 +1,5 @@
 package com.leonid.springboot.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,13 +21,5 @@ public class Gender {
 
     public Gender(String genderValue) {
         this.genderValue = genderValue;
-    }
-
-    @Override
-    public String toString() {
-        return "Gender{" +
-                "genderId=" + genderId +
-                ", genderValue='" + genderValue +
-                '}';
     }
 }

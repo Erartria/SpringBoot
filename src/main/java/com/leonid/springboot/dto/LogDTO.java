@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogDTO {
+    private int id;
     private int profileID;
     private long changedTime;
     private String newStatus;

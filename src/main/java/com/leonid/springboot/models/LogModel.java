@@ -2,11 +2,11 @@ package com.leonid.springboot.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class LogModel {
+    private int id;
     private int profileId;
     private long changedTime;
     private String newStatus;
@@ -16,10 +16,10 @@ public class LogModel {
         this.newStatus = newStatus;
     }
 
-    public LogModel(int profileId, String newStatus, long changedTime) {
+    public LogModel(int profileId, long changedTime, String newStatus) {
         this.profileId = profileId;
-        this.newStatus = newStatus;
         this.changedTime = changedTime;
+        this.newStatus = newStatus;
     }
 
 }
