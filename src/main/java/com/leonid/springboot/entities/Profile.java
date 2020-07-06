@@ -23,13 +23,13 @@ import javax.persistence.*;
     @AttributeOverrides(value = {
             @AttributeOverride(name = "statusValue", column = @Column(name = "status_value"))
     })*/
-    /*@ManyToOne
-    @JoinColumn(name ="status",insertable = false, updatable = false, referencedColumnName = "status_id")
+    @ManyToOne
+    @JoinColumn(name ="status_id_fk",insertable = false, updatable = false, referencedColumnName = "status_id")
     private Status status;
-*/
-   /* @ManyToOne
+
+   @ManyToOne
     @JoinColumn(name ="gender_id_fk",insertable = false, updatable = false, referencedColumnName = "gender_id")
-    private Gender gender;*/
+    private Gender gender;
 
     public int getProfileId() {
         return profileId;
@@ -55,15 +55,15 @@ import javax.persistence.*;
         this.email = email;
     }
 
-    /*public Status getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
-    }*/
+    }
 
-    /*public Gender getGender() {
+    public Gender getGender() {
         return gender;
     }
 
@@ -71,14 +71,7 @@ import javax.persistence.*;
         this.gender = gender;
     }
 
-    public void setGenderID(int id) {
-        this.gender.setGenderId(id);
-    }
 
-    public int getGenderID(int id) {
-        return this.gender.getGenderId();
-    }
-*/
 
 
 

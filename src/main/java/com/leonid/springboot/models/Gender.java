@@ -27,9 +27,6 @@ public class Gender {
         this.genderValue = genderValue;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Profile> profileList = new ArrayList<>();
-
 
 
     public int getGenderId() {
@@ -48,20 +45,11 @@ public class Gender {
         this.genderValue = genderValue;
     }
 
-    public List<Profile> getProfileList() {
-        return profileList;
-    }
-
-    public void setProfileList(List<Profile> profileList) {
-        this.profileList = profileList;
-    }
-
     @Override
     public String toString() {
         return "Gender{" +
                 "genderId=" + genderId +
-                ", genderValue='" + genderValue + '\'' +
-                ", profileList=" + profileList +
+                ", genderValue='" + genderValue +
                 '}';
     }
 }

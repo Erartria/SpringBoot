@@ -29,6 +29,8 @@ public class ProfileServiceImpl implements ProfileServiceInterface {
 
     @Override
     public int create(Profile profile) {
+        Optional<Profile> profileByGender = repository.getFirstByGender_GenderValue(profile.getGender().getGenderValue());
+        profileByGender.orElseThrow(()->)
         repository.save(profile);
         return profile.getProfileId();
     }
