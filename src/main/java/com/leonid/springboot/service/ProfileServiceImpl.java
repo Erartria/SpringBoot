@@ -8,19 +8,21 @@ import com.leonid.springboot.models.ProfileModel;
 import com.leonid.springboot.repositories.GenderRepository;
 import com.leonid.springboot.repositories.ProfileRepository;
 import com.leonid.springboot.repositories.StatusRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+
 public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Integer> {
-    private final ProfileRepository repository;
+    private final ProfileRepository profileRepository;
     private final GenderRepository genderRepository;
     private final StatusRepository statusRepository;
 
     public ProfileServiceImpl(ProfileRepository repository, GenderRepository genderRepository, StatusRepository statusRepository) {
-        this.repository = repository;
+        this.profileRepository = repository;
         this.genderRepository = genderRepository;
         this.statusRepository = statusRepository;
     }
@@ -29,7 +31,7 @@ public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Inte
     @Override
     public List<ProfileModel> getAll() {
         List<ProfileModel> pms = new ArrayList<>();
-        List<Profile> ps = repository.findAll();
+        List<Profile> ps = profileRepository.findAll();
         for (Profile p :
                 ps) {
             ProfileModel pm = new ProfileModel();
@@ -44,8 +46,8 @@ public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Inte
     }
 
     @Override
-    public ProfileModel findById(Integer integer) {
-        Profile profile = repository.findById(integer)
+    public ProfileModel findById(Integer integer) throws EntityException {
+        Profile profile = profileRepository.findById(integer)
                 .orElseThrow(() ->
                         new EntityException("Profile with id " + integer + " not found")
                 );
@@ -59,7 +61,12 @@ public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Inte
 
     @Override
     public Integer create(ProfileModel profileModel) {
-        return this.repository.save(new Profile(
+        return this.profileRepository.save(this.convertFromModelToEntity(profileModel))
+                .getProfileId();
+    }
+
+    public Profile convertFromModelToEntity(ProfileModel profileModel) {
+        return new Profile(
                 statusRepository.findFirstByStatusValue(profileModel.getStatus().toLowerCase())
                         .orElseGet(() -> {
                             return statusRepository.save(new Status(profileModel.getStatus().toLowerCase()));
@@ -70,19 +77,18 @@ public class ProfileServiceImpl implements MyServiceInterface<ProfileModel, Inte
                         .orElseGet(() -> {
                             return genderRepository.save(new Gender(profileModel.getGender().toLowerCase()));
                         })
-        ))
-                .getProfileId();
+        );
     }
 
-    public boolean changedStatus(int profileId, String statusValue) {
-        Profile profile = this.repository.findById(profileId)
+    public Status changedStatus(int profileId, String statusValue) {
+        Profile profile = this.profileRepository.findById(profileId)
                 .orElseThrow(() ->
                         new EntityException("Profile " + profileId + " is not exists")
                 );
         if(profile.getStatus().getStatusValue().equals(statusValue)){
-            return false;
+            return profile.getStatus();
         }
-        this.repository.setStatusById(statusRepository.findFirstByStatusValue(statusValue)
+        this.profileRepository.setStatusById(statusRepository.findFirstByStatusValue(statusValue)
                 .orElseGet(()-> {
                     return statusRepository.save(new Status(statusValue.toLowerCase()));
                 })

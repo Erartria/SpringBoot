@@ -28,7 +28,47 @@ public class Profile {
     @JoinColumn(name = "gender_id_fk", referencedColumnName = "gender_id")
     private Gender gender;
 
-    public Profile(Status status, String username, String email,  Gender gender) {
+    public int getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(int profileId) {
+        this.profileId = profileId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Profile(Status status, String username, String email, Gender gender) {
         this.username = username;
         this.email = email;
         this.status = status;

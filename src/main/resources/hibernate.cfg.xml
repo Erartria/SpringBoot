@@ -23,6 +23,7 @@
         <mapping class="com.leonid.springboot.entities.Gender"/>
         <mapping class="com.leonid.springboot.entities.Profile"/>
         <mapping class="com.leonid.springboot.entities.Status"/>
+        <mapping class="com.leonid.springboot.entities.Log"/>
 
 
     </session-factory>
