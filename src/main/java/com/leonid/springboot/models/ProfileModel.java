@@ -2,9 +2,7 @@ package com.leonid.springboot.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class ProfileModel {
@@ -13,6 +11,7 @@ public class ProfileModel {
     private String email;
     private String gender;
     private String status;
+
 
     public ProfileModel(String userName, String email, String gender, String status) {
         this.userName = userName;

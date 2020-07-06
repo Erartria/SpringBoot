@@ -1,7 +1,5 @@
 package com.leonid.springboot.entities;
 
-import jdk.jfr.DataAmount;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,11 +26,11 @@ public class Profile {
     @JoinColumn(name = "gender_id_fk", referencedColumnName = "gender_id")
     private Gender gender;
 
-    public Profile(Status status, String username, String email,  Gender gender) {
+
+    public Profile(Status status, String username, String email, Gender gender) {
         this.username = username;
         this.email = email;
         this.status = status;
         this.gender = gender;
-
-}
+    }
 }

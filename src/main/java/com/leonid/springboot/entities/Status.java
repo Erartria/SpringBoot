@@ -1,6 +1,8 @@
 package com.leonid.springboot.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -14,19 +16,11 @@ public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "status_seq")
     @SequenceGenerator(name = "status_seq", schema = "project", sequenceName = "status_id_sequence", allocationSize = 1)
-    @Column(name = "status_id", updatable = false, nullable = false)
+    @Column(name = "status_id", updatable = false)
     private int statusId;
     private String statusValue;
 
     public Status(String statusValue) {
         this.statusValue = statusValue;
-    }
-
-    @Override
-    public String toString() {
-        return "Status{" +
-                "statusId=" + statusId +
-                ", statusValue='" + statusValue + '\'' +
-                '}';
     }
 }
