@@ -2,11 +2,13 @@ package com.leonid.springboot.service;
 
 import com.leonid.springboot.entities.Log;
 import com.leonid.springboot.entities.Profile;
+import com.leonid.springboot.entities.RequestLogger;
 import com.leonid.springboot.entities.Status;
 import com.leonid.springboot.exception.EntityException;
 import com.leonid.springboot.models.LogModel;
 import com.leonid.springboot.repositories.LogRepository;
 import com.leonid.springboot.repositories.ProfileRepository;
+import com.leonid.springboot.repositories.RequestLoggerRepository;
 import com.leonid.springboot.repositories.StatusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
     private final LogRepository logRepository;
     private final StatusRepository statusRepository;
     private final ProfileRepository profileRepository;
+    private final RequestLoggerRepository requestLoggerRepository;
 
     @Override
     public List<LogModel> getAll() {
@@ -66,18 +69,18 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
         return log.getLogId();
     }
 
-    public List<LogModel> getAllByStatusAndTimestamp(long time, String statusValue) {
-        List<LogModel> logModelList = new ArrayList<>();
-        List<Log> logList = logRepository.findAllByChangedTimeAfterAndStatus(time, statusValue);
-        for (Log log :
+    public List<LogModel> getByStatusAndTimestamp(long time, String statusValue) {
+        List<Log> logList = this.logRepository.findAllByChangedTimeAfterAndStatus_StatusValue(time, statusValue);
+        List<LogModel> logModelList = new ArrayList<LogModel>();
+        for (Log l :
                 logList) {
-            logModelList.add(new LogModel(
-                    log.getLogId(),
-                    log.getProfile().getProfileId(),
-                    log.getChangedTime(),
-                    log.getStatus().getStatusValue()
-            ));
+            logModelList.add(new LogModel(l.getLogId(), l.getProfile().getProfileId(), l.getChangedTime(), l.getStatus().getStatusValue()));
         }
-        return  logModelList;
+        this.requestLoggerRepository.save(new RequestLogger(
+                System.currentTimeMillis(),
+                statusValue,
+                time
+        ));
+        return logModelList;
     }
 }

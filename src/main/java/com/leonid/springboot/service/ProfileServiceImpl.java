@@ -54,8 +54,10 @@ public class ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel
 
     @Override
     public Integer create(ProfileModel profileModel) {
-        return this.profileRepository.save(this.convertFromModelToEntity(profileModel))
-                .getProfileId();
+        Profile profile = this.profileRepository.save(this.convertFromModelToEntity(profileModel));
+        logService.create(new LogModel(profile.getProfileId(), profileModel.getStatus()));
+        return profile.getProfileId();
+
     }
 
 
@@ -90,7 +92,7 @@ public class ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel
                         return statusRepository.save(new Status(profileModel.getStatus().toLowerCase()));
                     });
         } catch (NullPointerException e) {
-            stat =statusRepository.findFirstByStatusValue(null)
+            stat = statusRepository.findFirstByStatusValue(null)
                     .orElseGet(() -> {
                         return statusRepository.save(new Status(null));
                     });

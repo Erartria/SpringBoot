@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class LogModel {
     private int id;
+
     private int profileId;
     private long changedTime;
     private String newStatus;

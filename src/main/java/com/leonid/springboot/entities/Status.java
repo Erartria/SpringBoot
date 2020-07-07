@@ -18,6 +18,7 @@ public class Status {
     @SequenceGenerator(name = "status_seq", schema = "project", sequenceName = "status_id_sequence", allocationSize = 1)
     @Column(name = "status_id", updatable = false)
     private int statusId;
+    @Column(length = 10)
     private String statusValue;
 
     public Status(String statusValue) {

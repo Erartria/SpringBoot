@@ -13,9 +13,11 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_seq")
     @SequenceGenerator(name = "profile_seq", schema = "project", sequenceName = "profile_id_sequence", allocationSize = 1)
-    @Column(name = "profile_id", updatable = false, nullable = false)
+    @Column(name = "profile_id", updatable = false, nullable = false, )
     private int profileId;
+    @Column(length = 20)
     private String username;
+    @Column(length = 20)
     private String email;
 
     @ManyToOne

@@ -16,8 +16,8 @@ public class Gender {
     @SequenceGenerator(name = "gender_seq", schema = "project", sequenceName = "gender_id_sequence", allocationSize = 1)
     @Column(name = "gender_id", updatable = false, nullable = false)
     private int genderId;
+    @Column(name = "gender_value", length = 20)
     private String genderValue;
-
 
     public Gender(String genderValue) {
         this.genderValue = genderValue;

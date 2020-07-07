@@ -10,12 +10,9 @@ import com.leonid.springboot.service.ProfileServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-;
 
 @RestController
 @AllArgsConstructor
@@ -27,25 +24,17 @@ public class DataBaseController {
 
     @GetMapping("/profile")
     public List<ProfileDTO> getProfiles() {
-        List<ProfileModel> profileModelList = profileService.getAll();
-        List<ProfileDTO> profileDTOList = new ArrayList<>();
-        for (ProfileModel pm :
-                profileModelList) {
-            ProfileDTO profileDTO = new ProfileDTO(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
-            profileDTOList.add(profileDTO);
-        }
-        return profileDTOList;
+        return fromServiceToControllerProfileList(profileService.getAll());
     }
 
     @PostMapping("/profile")
-    public int createProfile(@RequestBody ProfileDTO profile) {
-        return profileService.create(new ProfileModel(profile.getUserName(), profile.getEmail(), profile.getGender(), profile.getStatus()));
+    public int createProfile(@RequestBody ProfileDTO profileDTO) {
+        return profileService.create(fromControllerToServiceProfile(profileDTO));
     }
 
     @GetMapping("/profile/{id}")
     public ProfileDTO getProfileById(@PathVariable(value = "id") Integer profileId) {
-        ProfileModel pm = profileService.findById(profileId);
-        return new ProfileDTO(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
+        return fromServiceToControllerProfile(profileService.findById(profileId));
     }
 
     @PutMapping("/profile/{id}")
@@ -57,27 +46,46 @@ public class DataBaseController {
 
     @GetMapping("/logs")
     public List<LogDTO> getLogs() {
-        List<LogModel> logModelList = logService.getAll();
+        return fromServiceToControllerLogList(logService.getAll());
+    }
+
+        @GetMapping("/logs/{status}")
+    public List<LogDTO> getLogsByTimestampAndStatus(
+            @PathVariable(value = "status") String status,
+            @RequestParam(value = "timestamp", required = false, defaultValue = "0") long time) {
+        return fromServiceToControllerLogList(logService.getByStatusAndTimestamp(time, status));
+    }
+
+
+    private static LogDTO fromLogModelToLogDTO(LogModel log) {
+        return new LogDTO(log.getId(), log.getProfileId(), log.getChangedTime(), log.getNewStatus());
+    }
+
+    private static ProfileDTO fromServiceToControllerProfile(ProfileModel pm) {
+        return new ProfileDTO(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
+    }
+
+    private static ProfileModel fromControllerToServiceProfile(ProfileDTO pm) {
+        return new ProfileModel(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
+    }
+
+    private static List<LogDTO> fromServiceToControllerLogList(List<LogModel> logModelList) {
         List<LogDTO> logDTOList = new ArrayList<>();
         for (LogModel log :
                 logModelList) {
-            LogDTO logdto = new LogDTO(log.getId(), log.getProfileId(), log.getChangedTime(), log.getNewStatus());
-            logDTOList.add(logdto);
+            logDTOList.add(fromLogModelToLogDTO(log));
         }
         return logDTOList;
     }
 
-    @GetMapping("/logs/{status}")
-    public List<LogDTO> getLogsByTimestampAndStatus(
-            @PathVariable(value = "status") String status,
-            @RequestParam(value = "timestamp", required = false, defaultValue = "0") long time) {
-        List<LogModel> logModelList = logService.getAllByStatusAndTimestamp(time,status);
-        List<LogDTO> logDTOList = new ArrayList<>();
-        for (LogModel log :
-                logModelList) {
-            LogDTO logdto = new LogDTO(log.getId(), log.getProfileId(), log.getChangedTime(), log.getNewStatus());
-            logDTOList.add(logdto);
+    private static List<ProfileDTO> fromServiceToControllerProfileList(List<ProfileModel> profileModelList) {
+        List<ProfileDTO> profileDTOList = new ArrayList<>();
+        for (ProfileModel pm :
+                profileModelList) {
+            ProfileDTO profileDTO = new ProfileDTO(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
+            profileDTOList.add(profileDTO);
         }
-        return logDTOList;
+        return profileDTOList;
     }
+
 }
