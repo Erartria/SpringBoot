@@ -3,7 +3,7 @@ package com.leonid.springboot.service;
 import com.leonid.springboot.entities.Gender;
 import com.leonid.springboot.entities.Profile;
 import com.leonid.springboot.entities.Status;
-import com.leonid.springboot.exception.EntityException;
+import com.leonid.springboot.exception.NotFoundEntityWithID;
 import com.leonid.springboot.models.LogModel;
 import com.leonid.springboot.models.ProfileModel;
 import com.leonid.springboot.repositories.GenderRepository;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
-public class ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel, Integer> {
+public class    ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel, Integer> {
     private final ProfileRepository profileRepository;
     private final GenderRepository genderRepository;
     private final StatusRepository statusRepository;
@@ -39,10 +39,10 @@ public class ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel
     }
 
     @Override
-    public ProfileModel findById(Integer integer) throws EntityException {
+    public ProfileModel findById(Integer integer) throws NotFoundEntityWithID {
         Profile profile = profileRepository.findById(integer)
                 .orElseThrow(() ->
-                        new EntityException("Profile with id " + integer + " not found")
+                        new NotFoundEntityWithID("Profile with id " + integer + " not found")
                 );
         return new ProfileModel(
                 profile.getProfileId(),
@@ -65,7 +65,7 @@ public class ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel
         Map<String, Object> map = new HashMap<String, Object>();
         Profile profile = this.profileRepository.findById(profileId)
                 .orElseThrow(() ->
-                        new EntityException("Profile " + profileId + " is not exists")
+                        new NotFoundEntityWithID("Profile " + profileId + " is not exists")
                 );
         Status oldStatus = profile.getStatus();
         map.put("profileId", profile.getProfileId());
@@ -84,7 +84,7 @@ public class ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel
     }
 
 
-    public Profile convertFromModelToEntity(ProfileModel profileModel) {
+    private Profile convertFromModelToEntity(ProfileModel profileModel) {
         Status stat;
         try {
             stat = statusRepository.findFirstByStatusValue(profileModel.getStatus().toLowerCase())

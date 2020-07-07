@@ -2,9 +2,9 @@ package com.leonid.springboot.service;
 
 import com.leonid.springboot.entities.Log;
 import com.leonid.springboot.entities.Profile;
-import com.leonid.springboot.entities.RequestLogger;
 import com.leonid.springboot.entities.Status;
-import com.leonid.springboot.exception.EntityException;
+import com.leonid.springboot.entities.RequestLogger;
+import com.leonid.springboot.exception.NotFoundEntityWithID;
 import com.leonid.springboot.models.LogModel;
 import com.leonid.springboot.repositories.LogRepository;
 import com.leonid.springboot.repositories.ProfileRepository;
@@ -42,9 +42,9 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
     }
 
     @Override
-    public LogModel findById(Integer integer) throws EntityException {
+    public LogModel findById(Integer integer) throws NotFoundEntityWithID {
         Log log = logRepository.findById(integer)
-                .orElseThrow(() -> new EntityException("Log with ID " + integer + " is not exists"));
+                .orElseThrow(() -> new NotFoundEntityWithID("Log with ID " + integer + " is not exists"));
         return new LogModel(
                 log.getLogId(),
                 log.getProfile().getProfileId(),
@@ -57,7 +57,7 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
     public Integer create(LogModel logModel) {
         Profile profile = profileRepository.findById(logModel.getProfileId())
                 .orElseThrow(() ->
-                        new EntityException("Profile with id " + logModel.getProfileId() + " is not exists")
+                        new NotFoundEntityWithID("Profile with id " + logModel.getProfileId() + " is not exists")
                 );
         Log log = new Log(
                 profile, statusRepository.findFirstByStatusValue(logModel.getNewStatus().toLowerCase())

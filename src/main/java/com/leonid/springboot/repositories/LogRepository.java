@@ -14,6 +14,4 @@ import java.util.Optional;
 @Repository
 public interface LogRepository extends JpaRepository<Log, Integer> {
     List<Log> findAllByChangedTimeAfterAndStatus_StatusValue(long time, String status);
-
-    Optional<Log> findFirstByProfile_ProfileId(int id);
 }
