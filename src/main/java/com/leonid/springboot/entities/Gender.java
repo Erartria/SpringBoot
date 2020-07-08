@@ -1,5 +1,6 @@
 package com.leonid.springboot.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "genderes", schema = "project")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Gender {
 
     @Id

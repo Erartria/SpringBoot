@@ -19,6 +19,7 @@ public class RequestLogger {
     private int rlogId;
 
     private long timestamp;
+    @Column(length = 20)
     private String statusValue;
     private long requestedTime;
 

@@ -1,5 +1,6 @@
 package com.leonid.springboot.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "profiles", schema = "project")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_seq")
@@ -35,4 +37,5 @@ public class Profile {
         this.status = status;
         this.gender = gender;
     }
+
 }

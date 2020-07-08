@@ -44,7 +44,7 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
     @Override
     public LogModel findById(Integer integer) throws NotFoundEntityWithID {
         Log log = logRepository.findById(integer)
-                .orElseThrow(() -> new NotFoundEntityWithID("Log with ID " + integer + " is not exists"));
+                .orElseThrow(() -> new NotFoundEntityWithID("Log with id " + integer + " not found"));
         return new LogModel(
                 log.getLogId(),
                 log.getProfile().getProfileId(),
@@ -60,6 +60,7 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
                         new NotFoundEntityWithID("Profile with id " + logModel.getProfileId() + " is not exists")
                 );
         Log log = new Log(
+                logModel.getId(),
                 profile, statusRepository.findFirstByStatusValue(logModel.getNewStatus().toLowerCase())
                 .orElseGet(() -> {
                     return statusRepository.save(new Status(logModel.getNewStatus()));
@@ -70,17 +71,18 @@ public class LogServiceImpl implements DataBaseServiceInterface<LogModel, Intege
     }
 
     public List<LogModel> getByStatusAndTimestamp(long time, String statusValue) {
+        this.requestLoggerRepository.save(new RequestLogger(
+                System.currentTimeMillis(),
+                statusValue,
+                time
+        ));
         List<Log> logList = this.logRepository.findAllByChangedTimeAfterAndStatus_StatusValue(time, statusValue);
         List<LogModel> logModelList = new ArrayList<LogModel>();
         for (Log l :
                 logList) {
             logModelList.add(new LogModel(l.getLogId(), l.getProfile().getProfileId(), l.getChangedTime(), l.getStatus().getStatusValue()));
         }
-        this.requestLoggerRepository.save(new RequestLogger(
-                System.currentTimeMillis(),
-                statusValue,
-                time
-        ));
+
         return logModelList;
     }
 }

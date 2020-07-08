@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Service
 @AllArgsConstructor
-public class    ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel, Integer> {
+public class ProfileServiceImpl implements DataBaseServiceInterface<ProfileModel, Integer> {
     private final ProfileRepository profileRepository;
     private final GenderRepository genderRepository;
     private final StatusRepository statusRepository;
@@ -54,10 +54,10 @@ public class    ProfileServiceImpl implements DataBaseServiceInterface<ProfileMo
 
     @Override
     public Integer create(ProfileModel profileModel) {
-        Profile profile = this.profileRepository.save(this.convertFromModelToEntity(profileModel));
-        logService.create(new LogModel(profile.getProfileId(), profileModel.getStatus()));
-        return profile.getProfileId();
 
+        Profile profile = this.profileRepository.save(this.convertFromModelToEntity(profileModel));
+        logService.create(new LogModel(profile.getProfileId(), profile.getStatus().getStatusValue()));
+        return profile.getProfileId();
     }
 
 
@@ -85,26 +85,26 @@ public class    ProfileServiceImpl implements DataBaseServiceInterface<ProfileMo
 
 
     private Profile convertFromModelToEntity(ProfileModel profileModel) {
-        Status stat;
-        try {
-            stat = statusRepository.findFirstByStatusValue(profileModel.getStatus().toLowerCase())
-                    .orElseGet(() -> {
-                        return statusRepository.save(new Status(profileModel.getStatus().toLowerCase()));
-                    });
-        } catch (NullPointerException e) {
+        Status stat = new Status(profileModel.getStatus());
+        if (profileModel.getStatus() == null) {
             stat = statusRepository.findFirstByStatusValue(null)
-                    .orElseGet(() -> {
-                        return statusRepository.save(new Status(null));
-                    });
+                    .orElseGet(() -> (statusRepository.save(new Status(null)))
+                    );
+        } else {
+            stat = statusRepository.findFirstByStatusValue(profileModel.getStatus().toLowerCase())
+                    .orElseGet(() -> (
+                            statusRepository.save(new Status(profileModel.getStatus().toLowerCase()))
+            ));
         }
         return new Profile(
-                stat,
+                profileModel.getId(),
                 profileModel.getUserName().toLowerCase(),
                 profileModel.getEmail().toLowerCase(),
+                stat,
                 genderRepository.findFirstByGenderValue(profileModel.getGender().toLowerCase())
-                        .orElseGet(() -> {
-                            return genderRepository.save(new Gender(profileModel.getGender().toLowerCase()));
-                        })
+                        .orElseGet(() ->
+                                (genderRepository.save(new Gender(profileModel.getGender().toLowerCase())))
+                        )
         );
     }
 

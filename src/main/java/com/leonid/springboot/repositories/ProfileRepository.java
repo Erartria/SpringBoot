@@ -15,4 +15,6 @@ public interface ProfileRepository extends JpaRepository<Profile, Integer> {
     @Transactional
     @Query("update Profile p set p.status=:status where p.profileId=:id")
     int setStatusById(@Param("status") Status s, @Param("id") int id);
+
+    boolean existsByUsername(String username);
 }
