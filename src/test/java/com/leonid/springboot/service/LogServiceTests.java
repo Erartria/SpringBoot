@@ -115,13 +115,13 @@ public class LogServiceTests {
         final long time = System.currentTimeMillis();
         final long reqTime = time - 71342;
         List<Log> empty = new ArrayList<>();
-        final RequestLogger requestLogger = new RequestLogger(27,time,"online",reqTime);
+        final RequestLogger requestLogger = new RequestLogger(27, time, "online", reqTime);
         Mockito.when(requestLoggerRepository.save(Mockito.any(RequestLogger.class))).thenReturn(requestLogger);
         Mockito.when(logRepository.findAllByChangedTimeAfterAndStatus_StatusValue(Mockito.anyInt(), Mockito.anyString())).thenReturn(empty);
 
         List<LogModel> emptyModel = new ArrayList<>();
-        List<LogModel> logModelList = service.getByStatusAndTimestamp(time,"online");
-        Assertions.assertEquals(logModelList,emptyModel,"List must be empty");
+        List<LogModel> logModelList = service.getByStatusAndTimestamp(time, "online");
+        Assertions.assertEquals(logModelList, emptyModel, "List must be empty");
 
         Mockito.verify(requestLoggerRepository).save(Mockito.any(RequestLogger.class));
         Mockito.verify(logRepository).findAllByChangedTimeAfterAndStatus_StatusValue(time, "online");

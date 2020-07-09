@@ -1,26 +1,23 @@
 package com.leonid.springboot.controllers;
 
 
-import com.leonid.springboot.dto.LogDTO;
 import com.leonid.springboot.dto.ProfileDTO;
-import com.leonid.springboot.models.LogModel;
 import com.leonid.springboot.models.ProfileModel;
-import com.leonid.springboot.service.LogServiceImpl;
 import com.leonid.springboot.service.ProfileServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@RestController()
 @AllArgsConstructor
 public class DataBaseController {
-    private final
-    ProfileServiceImpl profileService;
-    private final
-    LogServiceImpl logService;
+    private final ProfileServiceImpl profileService;
 
     @GetMapping("/profile")
     public List<ProfileDTO> getProfiles() {
@@ -28,37 +25,28 @@ public class DataBaseController {
     }
 
     @PostMapping("/profile")
-    public int createProfile(@RequestBody ProfileDTO profileDTO) {
+    public int postProfile(@RequestBody ProfileDTO profileDTO) {
         return profileService.create(fromControllerToServiceProfile(profileDTO));
     }
 
     @GetMapping("/profile/{id}")
     public ProfileDTO getProfileById(@PathVariable(value = "id") Integer profileId) {
-        return fromServiceToControllerProfile(profileService.findById(profileId));
+        try {
+            return fromServiceToControllerProfile(profileService.findById(profileId));
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 
     @PutMapping("/profile/{id}")
-    public Map<String, Object> changeStatusForId(
+    public Map<String, Object> putStatusForId(
             @PathVariable(value = "id") Integer profileId,
             @RequestParam(value = "status") String status) {
-        return profileService.changedStatus(profileId, status);
-    }
-
-    @GetMapping("/logs")
-    public List<LogDTO> getLogs() {
-        return fromServiceToControllerLogList(logService.getAll());
-    }
-
-        @GetMapping("/logs/{status}")
-    public List<LogDTO> getLogsByTimestampAndStatus(
-            @PathVariable(value = "status") String status,
-            @RequestParam(value = "timestamp", required = false, defaultValue = "0") long time) {
-        return fromServiceToControllerLogList(logService.getByStatusAndTimestamp(time, status));
-    }
-
-
-    private static LogDTO fromLogModelToLogDTO(LogModel log) {
-        return new LogDTO(log.getId(), log.getProfileId(), log.getChangedTime(), log.getNewStatus());
+        try {
+            return profileService.changedStatus(profileId, status);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 
     private static ProfileDTO fromServiceToControllerProfile(ProfileModel pm) {
@@ -67,15 +55,6 @@ public class DataBaseController {
 
     private static ProfileModel fromControllerToServiceProfile(ProfileDTO pm) {
         return new ProfileModel(pm.getUserName(), pm.getEmail(), pm.getGender(), pm.getStatus());
-    }
-
-    private static List<LogDTO> fromServiceToControllerLogList(List<LogModel> logModelList) {
-        List<LogDTO> logDTOList = new ArrayList<>();
-        for (LogModel log :
-                logModelList) {
-            logDTOList.add(fromLogModelToLogDTO(log));
-        }
-        return logDTOList;
     }
 
     private static List<ProfileDTO> fromServiceToControllerProfileList(List<ProfileModel> profileModelList) {
@@ -87,5 +66,4 @@ public class DataBaseController {
         }
         return profileDTOList;
     }
-
 }
